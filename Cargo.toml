@@ -6,7 +6,7 @@ authors = ["sylvavv"]
 license = "MIT"
 
 [lib]
-name = "dinput8"
+name = "xinput9_1_0"
 crate-type = ["cdylib"]
 
 [dependencies]

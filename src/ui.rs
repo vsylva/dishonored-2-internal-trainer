@@ -73,8 +73,16 @@ impl hudhook::ImguiRenderLoop for RenderLoop {
         _render_context: &'a mut dyn hudhook::RenderContext,
     ) {
         unsafe {
-            if is_key_down_once(0x2D) {
-                IS_SHOW_UI = !IS_SHOW_UI;
+            static mut WAS_KEY_DOWN: bool = false;
+
+            if (crate::GetAsyncKeyState(0x2D) & 0x8000) != 0 {
+                if !WAS_KEY_DOWN {
+                    WAS_KEY_DOWN = true;
+
+                    IS_SHOW_UI = !IS_SHOW_UI;
+                }
+            } else if WAS_KEY_DOWN {
+                WAS_KEY_DOWN = false;
             }
 
             if !IS_SHOW_UI {
@@ -98,19 +106,4 @@ impl hudhook::ImguiRenderLoop for RenderLoop {
                 .build(|| on_frame(ui));
         }
     }
-}
-
-pub(crate) unsafe fn is_key_down_once(virtual_key_code: i32) -> bool {
-    static mut WAS_KEY_DOWN: bool = false;
-
-    if (crate::GetAsyncKeyState(virtual_key_code) & 0x8000) != 0 {
-        if !WAS_KEY_DOWN {
-            WAS_KEY_DOWN = true;
-            return true;
-        }
-    } else {
-        WAS_KEY_DOWN = false;
-    }
-
-    false
 }
