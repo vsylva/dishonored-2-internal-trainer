@@ -1,6 +1,8 @@
 [package]
 name = "dishonored-2-internal-trainer"
 edition = "2021"
+license-file = "LICENSE"
+publish = false
 
 [lib]
 name = "hid"
