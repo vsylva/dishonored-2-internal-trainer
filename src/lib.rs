@@ -2,14 +2,14 @@ use ::core::arch::asm;
 
 struct Trainer {
     is_show_ui: bool,
-    hook_instant_choke: ByteHook,
-    hook_never_fall: ByteHook,
-    hook_blink_no_hit_stun: ByteHook,
-    hook_blink_distance: AsmHook,
-    blink_no_animation: AsmHook,
-    hook_blink_no_cd: AsmHook,
-    hook_unlimited_mana: AsmHook,
-    hook_bend_time: AsmHook,
+    立即击晕: ByteHook,
+    永不坠落: ByteHook,
+    闪现无硬直: ByteHook,
+    闪现距离: AsmHook,
+    闪现无动画: AsmHook,
+    闪现无CD: AsmHook,
+    无限法力: AsmHook,
+    无限暂停时间: AsmHook,
 }
 
 #[derive(Default)]
@@ -137,36 +137,36 @@ impl ByteHook {
 
 impl Trainer {
     unsafe fn on_frame(&mut self, ui: &hudhook::imgui::Ui) {
-        if ui.checkbox("无限法力", &mut self.hook_unlimited_mana.is_enabled) {
-            self.hook_unlimited_mana.switch()
+        if ui.checkbox("无限法力", &mut self.无限法力.is_enabled) {
+            self.无限法力.switch()
         }
 
-        if ui.checkbox("无限暂停时间", &mut self.hook_bend_time.is_enabled) {
-            self.hook_bend_time.switch()
+        if ui.checkbox("无限暂停时间", &mut self.无限暂停时间.is_enabled) {
+            self.无限暂停时间.switch()
         }
 
-        if ui.checkbox("立即击晕", &mut self.hook_instant_choke.is_enabled) {
-            self.hook_instant_choke.switch()
+        if ui.checkbox("立即击晕", &mut self.立即击晕.is_enabled) {
+            self.立即击晕.switch()
         }
 
-        if ui.checkbox("永不坠落", &mut self.hook_never_fall.is_enabled) {
-            self.hook_never_fall.switch()
+        if ui.checkbox("永不坠落", &mut self.永不坠落.is_enabled) {
+            self.永不坠落.switch()
         }
 
-        if ui.checkbox("闪现距离", &mut self.hook_blink_distance.is_enabled) {
-            self.hook_blink_distance.switch()
+        if ui.checkbox("闪现距离", &mut self.闪现距离.is_enabled) {
+            self.闪现距离.switch()
         }
 
-        if ui.checkbox("闪现无CD", &mut self.hook_blink_no_cd.is_enabled) {
-            self.hook_blink_no_cd.switch()
+        if ui.checkbox("闪现无CD", &mut self.闪现无CD.is_enabled) {
+            self.闪现无CD.switch()
         }
 
-        if ui.checkbox("闪现无硬直", &mut self.hook_blink_no_hit_stun.is_enabled) {
-            self.hook_blink_no_hit_stun.switch()
+        if ui.checkbox("闪现无硬直", &mut self.闪现无硬直.is_enabled) {
+            self.闪现无硬直.switch()
         }
 
-        if ui.checkbox("闪现无动画", &mut self.blink_no_animation.is_enabled) {
-            self.blink_no_animation.switch()
+        if ui.checkbox("闪现无动画", &mut self.闪现无动画.is_enabled) {
+            self.闪现无动画.switch()
         }
     }
 }
@@ -271,41 +271,41 @@ unsafe extern "system" fn DllMain(
             let mut trainer = Trainer {
                 is_show_ui: true,
 
-                hook_instant_choke: ByteHook::default(),
-                hook_never_fall: ByteHook::default(),
-                hook_blink_no_hit_stun: ByteHook::default(),
-                hook_blink_distance: AsmHook::default(),
-                blink_no_animation: AsmHook::default(),
-                hook_blink_no_cd: AsmHook::default(),
-                hook_unlimited_mana: AsmHook::default(),
-                hook_bend_time: AsmHook::default(),
+                立即击晕: ByteHook::default(),
+                永不坠落: ByteHook::default(),
+                闪现无硬直: ByteHook::default(),
+                闪现距离: AsmHook::default(),
+                闪现无动画: AsmHook::default(),
+                闪现无CD: AsmHook::default(),
+                无限法力: AsmHook::default(),
+                无限暂停时间: AsmHook::default(),
             };
 
-            trainer.hook_instant_choke.create(
-                main_mod_info.base,
-                main_mod_info.size,
-                "8B 53 24 85 D2 74 18",
-                vec![0x77],
-                -2,
-            );
+            // trainer.立即击晕.create(
+            //     main_mod_info.base,
+            //     main_mod_info.size,
+            //     "8B 53 24 85 D2 74 18",
+            //     vec![0x77],
+            //     -2,
+            // );
 
-            trainer.hook_blink_no_hit_stun.create(
-                main_mod_info.base,
-                main_mod_info.size,
-                "48 8B 41 10 48 8B 48 28 48 8B 81 90 00 00 00 48 85 C0 74 0E 48 8B 40 70 48 85 C0",
-                vec![0x30, 0xC0, 0xC3, 0x90],
-                0,
-            );
+            // trainer.闪现无硬直.create(
+            //     main_mod_info.base,
+            //     main_mod_info.size,
+            //     "48 8B 41 10 48 8B 48 28 48 8B 81 90 00 00 00 48 85 C0 74 0E 48 8B 40 70 48 85 C0",
+            //     vec![0x30, 0xC0, 0xC3, 0x90],
+            //     0,
+            // );
 
-            trainer.hook_never_fall.create(
-                main_mod_info.base,
-                main_mod_info.size,
-                "89 46 24 F3 0F 10 45 80",
-                vec![0x90, 0x90, 0x90],
-                0,
-            );
+            // trainer.永不坠落.create(
+            //     main_mod_info.base,
+            //     main_mod_info.size,
+            //     "89 46 24 F3 0F 10 45 80",
+            //     vec![0x90, 0x90, 0x90],
+            //     0,
+            // );
 
-            trainer.hook_unlimited_mana.create(
+            trainer.无限法力.create(
                 main_mod_info.base,
                 main_mod_info.size,
                 "0F 2F D1 F3 0F 10 7B",
@@ -313,37 +313,37 @@ unsafe extern "system" fn DllMain(
                 unlimited_mana as usize,
             );
 
-            trainer.hook_bend_time.create(
-                main_mod_info.base,
-                main_mod_info.size,
-                "F3 0F 11 7D 67 C7",
-                5,
-                bend_time as usize,
-            );
+            // trainer.无限暂停时间.create(
+            //     main_mod_info.base,
+            //     main_mod_info.size,
+            //     "F3 0F 11 7D 67 C7",
+            //     5,
+            //     bend_time as usize,
+            // );
 
-            trainer.hook_blink_distance.create(
-                main_mod_info.base,
-                main_mod_info.size,
-                "83 F8 FF 7E 13 48 8D 14 80 48 8B 43 40 48 8B 48 48",
-                5,
-                blink_distance as usize,
-            );
+            // trainer.闪现距离.create(
+            //     main_mod_info.base,
+            //     main_mod_info.size,
+            //     "83 F8 FF 7E 13 48 8D 14 80 48 8B 43 40 48 8B 48 48",
+            //     5,
+            //     blink_distance as usize,
+            // );
 
-            trainer.blink_no_animation.create(
-                main_mod_info.base,
-                main_mod_info.size,
-                "F3 44 0F 10 5A 70 4C 8D 4D DB 48 8D 55 67",
-                6,
-                blink_instant as usize,
-            );
+            // trainer.闪现无动画.create(
+            //     main_mod_info.base,
+            //     main_mod_info.size,
+            //     "F3 44 0F 10 5A 70 4C 8D 4D DB 48 8D 55 67",
+            //     6,
+            //     blink_instant as usize,
+            // );
 
-            trainer.hook_blink_no_cd.create(
-                main_mod_info.base,
-                main_mod_info.size,
-                "F3 0F 10 80 50 01 00 00 F3 0F 11 02 74 0C F3 0F 58 80 04 02 00 00",
-                8,
-                blink_no_cd as usize,
-            );
+            // trainer.闪现无CD.create(
+            //     main_mod_info.base,
+            //     main_mod_info.size,
+            //     "F3 0F 10 80 50 01 00 00 F3 0F 11 02 74 0C F3 0F 58 80 04 02 00 00",
+            //     8,
+            //     blink_no_cd as usize,
+            // );
 
             if let Err(_) = ::hudhook::Hudhook::builder()
                 .with::<hudhook::hooks::dx11::ImguiDx11Hooks>(trainer)
